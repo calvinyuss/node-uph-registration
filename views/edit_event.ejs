@@ -1,0 +1,86 @@
+
+<form acction="/admin/event/edits/<%= event._id %>?_method=PUT" method="POST">
+    name
+    <input class="field" type="text" name="name" value="<%= event.name %>">
+    <br>
+    description
+    <input class="field" type="text" name="description" value="<%= event.description %>"> 
+    <br>
+    price
+    <input class="field" type="text" name="price" value="<%= event.price %>">
+    <br/>
+    seat
+    <input class="field" type="text" name="seat" value="<%= event.seat %>">
+    <br>
+    <button class="save" id="seat" style="display: none">update</button>
+    <br/>
+</form>
+
+FIELD
+<br/>
+<% event.formSchema.forEach(function(field){ %>
+    <li id="<%=field._id%>">
+        <select class="inputType" name="inputType_<%= field.label %>">
+            <option value="<%= field.inputType %>" selected hidden><%= field.inputType %></option>
+            <option value="email">email</option>
+            <option value="text">text</option>
+            <option value="number">number</option>
+        </select>
+        <input class="labelText" type="text" name="<%= field.label %>" value="<%= field.label %>">
+        <button class="update-btn" id="<%= field._id %>" style="display: none" type="submit">update</button><button class="delete-btn">delete</button>
+    </li>
+<% }) %>
+
+<form action="/admin/event/edit/<%= event._id %>" method="POST"> 
+    New Field<br />
+    <select name="new_inputType">
+        <option value="none" selected disabled hidden>Select your option</option>
+        <option value="email">email</option>
+        <option value="text">text</option>
+        <option value="number">number</option>
+    </select>
+    
+    <input type="text" name="new_label">
+    <button type="submit">Save</button>
+</form>
+
+<script>
+    $(document).ready(function() {
+      $(".field").change(function(){
+          $('.save').show();
+      })
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $(".labelText, .inputType").change(function(){
+            let id = $(this).parent().attr('id')
+            $(`button#${id}.update-btn`).show();
+        })
+    })
+
+    $(document).ready(function(){
+        $(".update-btn").click(async function(event){
+            try{
+                let newLabel = $(this).siblings('input').val()
+                let newType = $(this).siblings('select').val()
+                let id = $(this).attr('id');
+                let newFormField = {}
+                newFormField = {
+                    type:"formSchema",
+                    _id:id,
+                    label:newLabel,
+                    inputType:newType
+                }
+                console.log(newFormField)
+            
+                await $.post('/admin/event/edit/<%=event._id%>?_method=PUT',newFormField)
+                setTimeout(function() {
+                window.location.reload();
+                },0);
+            }catch(err){
+                console.log(err)
+            }
+        })
+    })
+</script>

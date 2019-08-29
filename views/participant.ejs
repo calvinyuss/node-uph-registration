@@ -1,0 +1,95 @@
+<head>
+    <style>
+    table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    td,
+    th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    }
+
+    tr:nth-child(even) {
+    background-color: #dddddd;
+    }
+
+    .field:hover{
+        cursor: pointer;
+        opacity: 0.5;
+    }
+
+    </style>
+</head>
+<body>
+    <h1>Participant</h1>
+    
+    <table>
+        
+        <tr>
+        <% event.formSchema.forEach(function(field){ %>
+            <td><%= field.label  %></td>
+        <% }) %>
+        </tr>
+
+        <% forms.forEach(function(form){ %>
+        <tr class="field" id="<%=form._id%>">
+            <% Object.keys(form.data).forEach(function(key){ %>
+                <td id="<%=key.replace(/\s/g, '')%>"><%=form.data[key]%></td>
+            <% }) %> 
+        </tr>
+        <% }) %>
+    </table>
+
+    <button type="button" class="btn btn-info btn-lg" id="myBtn">Open Modal</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <% event.formSchema.forEach(function(field){ %>
+                <div class="modal_field">
+                    <div class="col-4"><%= field.label  %></div>  
+                    <div class="ml-5" id="<%= field.label.replace(/\s/g, '')  %>">Null</div>
+                    <hr>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function(){
+        $(".field").click(function(){
+            let fields = []
+            $(this).children('td').each(function(){
+                let id = $(this).attr('id');
+                let text = $(this).text();
+                fields.push({
+                    id : id,
+                    text : text
+                })
+            })
+
+            console.log($('.modal_field').find('#Student ID').text())
+            
+
+            for(let field of fields){\
+                console.log(field.id.trim())
+                console.log(field.id)
+                $('.modal_field').find(`#${field.id}`).html(`${field.text}`)
+            }
+            $("#myModal").modal()
+        });
+    });
+</script>
+</body>
+      

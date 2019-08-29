@@ -3,6 +3,7 @@ const expressLayouts = require('express-ejs-layouts');
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
+const methodOverride = require('method-override');
 const db = require('./models/db');
 const app = express();
 
@@ -12,6 +13,8 @@ require('./config/passport')(passport);
 // EJS
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
+
+app.use(methodOverride('_method'));
 
 // Express body parser
 app.use(express.urlencoded({ extended: true }));
@@ -40,12 +43,12 @@ app.use(function(req, res, next) {
   next();
 });
 
-// app.get('/',(req,res)=>{
-//   res.redirect('/form');
-// })
+app.get('/',(req,res)=>{
+  res.redirect('/form/5d6542c857e9f71224c2ba24');
+})
 
 // Routes
-app.use('/form', require('./routes/form.js'));
+app.use('/form', require('./routes/user.js'));
 app.use('/admin', require('./routes/admin.js'));
 
 // app.get('*',(req,res)=>{

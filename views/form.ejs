@@ -1,3 +1,27 @@
 <% include ./partials/messages %>
+<head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+</head>
+<body>
+    <form action="/form/<%= event._id%>/register" method="POST">
+        <% for (let field of event.formSchema) { %>
+            <div class="input-field col s8 offset-s2 m6 offset-m3 l4 offset-l4">  
+            <% if (field.inputType === 'number') { %>
+                <input type="text" name="<%= field.label %>" pattern="\d+" class="validate" required>
+            <% } else { %>
+                <input type="<%= field.inputType %>" name="<%= field.label %>" class="validate" required>
+            <% } %>
+            <label class="active"><%= field.label %></label>
+            </div>
+        <% } %>
+        <div class="row center-align">
+            <button style="margin-bottom:2em;" class="" type="submit">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+    </form>
 
-<h1>User form</h1>
+    <script>
+    </script>
+</body>

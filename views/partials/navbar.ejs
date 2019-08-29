@@ -1,0 +1,23 @@
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#create_event" class="nav-link">Create event</a></li>
+    <li><a href="#view_event" class="nav-link">View event</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="create_event" class="tab-pane fade in active">
+      <% include ../partials/create_event %>
+    </div>
+    <div id="view_event" class="tab-pane fade">
+      <% include ../partials/view_event %>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $(".nav-tabs a").click(function() {
+        $(this).tab("show");
+      });
+    });
+  </script>
+</div>

@@ -1,0 +1,10 @@
+<div>
+    <% events.forEach(function(event){ %>
+    <li>
+        <%= event.name %>
+        <a href="/admin/event/edit/<%=event._id%>">Edit</a>
+        <a href="/admin/event/<%=event._id%>">Preview</a>
+        <a href="/admin/event/<%=event._id%>/participant">Participant</a>
+    </li>
+    <%}) %>
+</div>
