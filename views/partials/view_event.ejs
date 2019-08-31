@@ -1,3 +1,7 @@
+<div class="toast hide position-absolute mt-2" style="left: 50%" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body">
+    </div>
+</div>
 <div>
     <% events.forEach(function(event){ %>
     <li>
@@ -5,6 +9,26 @@
         <a href="/admin/event/edit/<%=event._id%>">Edit</a>
         <a href="/admin/event/<%=event._id%>">Preview</a>
         <a href="/admin/event/<%=event._id%>/participant">Participant</a>
+        <a id="<%=event._id%>" href="" class="delete-event-btn">Delete event</a>
     </li>
     <%}) %>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $(".delete-event-btn").click(async function(e){
+            e.preventDefault()
+            $('.toast-body').text('Deleting...')
+            $('.toast').toast({delay:1000000});
+            $('.toast').toast('show');
+            let eventId = $(this).attr("id");
+            await $.post(`/admin/event/${eventId}?_method=DELETE`)
+
+            $('.toast').toast('dispose')
+            $('.toast-body').text('Delete Succeed')
+            $('.toast').toast({delay:2000});
+            $('.toast').toast('show');
+            $(this).parent().remove()
+        })
+    })
+</script>

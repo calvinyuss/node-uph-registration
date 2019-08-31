@@ -42,6 +42,19 @@ router.post('/event/create', ensureAuthenticated, async (req, res) => {
   })
 })
 
+//delete event
+router.delete('/event/:id', ensureAuthenticated, async (req, res) => {
+  let eventID = req.params.id
+  try{
+    await Form.remove({ownedBy:eventID})
+    await Event.remove({_id:eventID});
+    res.json({msg:"delete succeed"})
+  }catch(err){
+    console.log(err)
+    res.status(404).json({msg:"error"})
+  }
+})
+
 //edit event page
 router.get('/event/edit/:id', ensureAuthenticated, async (req, res) => {
   let event = await Event.findById(req.params.id);
