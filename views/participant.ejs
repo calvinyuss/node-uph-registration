@@ -17,11 +17,6 @@
     background-color: #dddddd;
     }
 
-    .field:hover{
-        cursor: pointer;
-        opacity: 0.5;
-    }
-
     </style>
 </head>
 <body>
@@ -33,18 +28,29 @@
         <% event.formSchema.forEach(function(field){ %>
             <td><%= field.label  %></td>
         <% }) %>
+            <td>Status</td>
         </tr>
 
         <% forms.forEach(function(form){ %>
-        <tr class="field" id="<%=form._id%>">
+        <tr id="<%=form._id%>">
             <% Object.keys(form.data).forEach(function(key){ %>
-                <td id="<%=key.replace(/\s/g, '')%>"><%=form.data[key]%></td>
+                <td class="field" id="<%=key.replace(/\s/g, '')%>"><%=form.data[key]%></td>
             <% }) %> 
+                <td id='status'><%= form.status %></td>
+                 <td id="<%=form._id%>" class="text-center" style="width: 7rem">
+                    <% if(form.status=='Waiting'){ %>
+                        <button id="submit-status" value="Accepted" class="btn btn-xs btn-success" type="submit">&#10003</button>
+                        <button id="submit-status" value="Rejected" class="btn btn-xs btn-danger" type="submit">&#10006</button>
+                    <%}else if(form.status=="Rejected"){%>
+                        <button id="submit-status" value="Accepted" class="btn btn-xs btn-success" type="submit">&#10003</button>
+                    <%}else if(form.status=="Accepted"){%>
+                        <button id="submit-status" value="Rejected" class="btn btn-xs btn-danger" type="submit">&#10006</button>
+                    <%}%>
+                 </td>
+                
         </tr>
         <% }) %>
     </table>
-
-    <button type="button" class="btn btn-info btn-lg" id="myBtn">Open Modal</button>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
@@ -63,14 +69,46 @@
                     <hr>
                 </div>
             <% }) %>
+            <div class="modal_field">
+                <div class="col-4">Status</div>  
+                <div class="ml-5 mb-3" id="status">Null</div>
+            </div>
         </div>
     </div>
 
 <script>
+    // $(document).ready(function(){
+    //     $(".field").click(function(){
+    //         let fields = []
+    //         $(this).children('td').each(function(){
+    //             let id = $(this).attr('id');
+    //             let text = $(this).text();
+    //             fields.push({
+    //                 id : id,
+    //                 text : text
+    //             })
+    //         })
+    //         for(let field of fields){
+    //             console.log(field.id.trim())
+    //             console.log(field.id)
+    //             $('.modal_field').find(`#${field.id}`).html(`${field.text}`)
+    //         }
+    //         $("#myModal").modal()
+    //     });
+    // });
+
     $(document).ready(function(){
         $(".field").click(function(){
             let fields = []
-            $(this).children('td').each(function(){
+            fields.push({
+                id: $(this).attr('id'),
+                text: $(this).text()
+            })
+            fields.push({
+                id: "status",
+                text: $(this).siblings("#status").text()
+            })
+            $(this).siblings('td').not('#status').not(":last-child").each(function(){
                 let id = $(this).attr('id');
                 let text = $(this).text();
                 fields.push({
@@ -78,18 +116,46 @@
                     text : text
                 })
             })
-
-            console.log($('.modal_field').find('#Student ID').text())
-            
-
-            for(let field of fields){\
-                console.log(field.id.trim())
-                console.log(field.id)
+            for(let field of fields){
                 $('.modal_field').find(`#${field.id}`).html(`${field.text}`)
             }
-            $("#myModal").modal()
-        });
-    });
+            $("#myModal").modal()   
+        })
+    })
+
+    $(document).ready(function(){
+        $("#status").submit(function(){
+            console.log($(this).parent.attr('id'))
+        })
+    })
+
+    $(document).ready(function(){
+        $(".field").hover(function(){
+            $(this).css("cursor","pointer")
+            $(this).css('opacity','0.5')
+            $(this).siblings().not("#status").not(":last-child").css('opacity','0.5')
+        },function(){
+            $(this).css("cursor","default")
+            $(this).css('opacity','1')
+            $(this).siblings().not("#status").css('opacity','1')
+        })
+    })
+
+    $(document).ready(function(){
+        $('#submit-status').click(async function(e){
+            e.preventDefault()
+            let id = $(this).parent().attr("id")
+            let formStatus= $(this).val()
+            console.log(formStatus)
+            let status = {}
+            status = {
+                _id: id,
+                value : formStatus
+            }
+            await $.post(`/admin/event/<%=event._id%>/participant/${id}?_method=PUT`,status)
+        })
+    })
+
 </script>
 </body>
       

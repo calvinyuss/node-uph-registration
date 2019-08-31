@@ -5,6 +5,11 @@ const formSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:"Event"
     },
+    status:{
+        type:String,
+        default :'Waiting',
+        enum : ['Waiting','Accepted','Rejected'] 
+    },
     data: mongoose.Schema.Types.Mixed,
     date: {
         type: Date,

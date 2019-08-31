@@ -1,27 +1,199 @@
 <% include ./partials/messages %>
-<head>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
-</head>
-<body>
-    <form action="/form/<%= event._id%>/register" method="POST">
-        <% for (let field of event.formSchema) { %>
-            <div class="input-field col s8 offset-s2 m6 offset-m3 l4 offset-l4">  
-            <% if (field.inputType === 'number') { %>
-                <input type="text" name="<%= field.label %>" pattern="\d+" class="validate" required>
-            <% } else { %>
-                <input type="<%= field.inputType %>" name="<%= field.label %>" class="validate" required>
-            <% } %>
-            <label class="active"><%= field.label %></label>
-            </div>
-        <% } %>
-        <div class="row center-align">
-            <button style="margin-bottom:2em;" class="" type="submit">Submit
-                <i class="material-icons right">send</i>
-            </button>
-        </div>
-    </form>
 
-    <script>
-    </script>
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+    <style> 
+body {
+	margin: 0 auto;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	background-color: #f4fcff;
+}
+
+.header {
+	background-color : blue;
+	height : 70px;
+	color : f4fcff;	
+}
+
+.title {
+	width: 400px;
+	text-align: center;
+	margin: 0 auto;
+	color : white;
+	font-size: 20px;
+	font-weight: bold;
+	padding-top: 10px
+}
+
+.container_ {
+	padding-top: 10px;
+	background-color: f4fcff;
+	/* background: rgb(212,212,224);
+	background: radial-gradient(circle, rgba(212,212,224,1) 0%, rgba(244,252,255,1) 100%); */
+}
+.card_ {
+	margin: 0 auto;
+	margin-top: 60px;
+	border-width: 1px;
+	width: 750px;
+	height: 370px;
+}
+
+.cardHead {
+	background-color: white;
+	height: 60px;
+	text-align: center;
+	width: 380px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.cardHeadText {
+	font-size: 20px;
+	text-align: center;
+}
+
+.cardBody_ {
+	float: left;
+	margin : 0 auto;
+	height: auto;
+	padding-top: 5px;	
+	border-width: 1px;
+	background-color: white;
+	width: 50%;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.cardSide_ {
+	float: left;
+	margin: 0 auto;
+	margin-top: 30px;
+	margin-left: -10px;
+	padding: 1rem;
+	width: 50%;
+	height: 400px;
+	background-color: white;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.cardSideHeadText{
+	text-align: center;
+
+}
+
+.cardSideBodyText{
+	margin-left: 1rem;
+	margin-right: 1rem;
+}
+
+.input ,input{
+	width: 280px;
+	margin: 0 auto;
+	height: 2rem;
+    margin-top: 10px; 
+}
+
+.textInput {
+	padding-top: 10px;
+	color: dimgray;
+	font-size: 15px;
+	margin-left: 10px;
+}
+select {
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 40px;	
+}
+
+input {
+	padding-left: 10px;
+	font-size: 13px;
+	border-radius: 25px;
+	border: 1px solid grey;
+}
+
+.footer {
+	position: relative;
+	bottom: 0;
+	background-color: f4fcff;
+	height: 65px;
+	font-size: 22px;
+	text-align: center;
+	padding-top: 30px;
+	
+}
+
+.credit {
+	font-size: 10px;
+	margin-top: 20px;
+	color: dimgray;
+}
+
+.register {
+	padding: .5rem 2rem;
+	background-color: black;
+	margin: 2rem auto 1rem auto;
+	color: white;
+	border-width: 0px;
+	cursor: pointer;
+	border-radius: 25px;
+	box-shadow: 0 4px 8px 0 rgba(166, 166, 166, 0.2), 0 6px 20px 0 rgba(166, 166, 166, 0.19);
+}
+
+.register:hover {
+	opacity: 0.5;
+}
+
+.chatbox {
+	margin: 0 auto;
+	margin-top: 40px;
+	text-align: center;
+	font-size: 14px;
+	color: red;
+	font-weight: bold;
+}
+    </style>
+</head>
+<title><%= event.name %></title>
+
+<body>
+    <div class="container_">
+        <div class="card_">
+            <div class="cardBody_">
+                <div class="cardHeadText">
+                    <h2>REGISTER</h2>
+                </div>
+                <form action="/form/<%= event._id%>/register" method="POST">
+                    <% for (let field of event.formSchema) { %>
+                        <div class="input">
+                            <% if (field.inputType === 'number') { %>
+                                <input type="text" name="<%= field.label %>" pattern="\d+" placeholder="<%= field.label %>">
+                            <% } else { %>
+                                <input type="<%= field.inputType %>" name="<%= field.label %>" placeholder="<%= field.label %>">
+                            <% } %>
+                        </div>
+                    <% } %>
+                    <button class="register" type="submit" value="REGISTER">REGISTER</button>
+                </form>
+            </div>
+
+            <div class="cardSide_">
+                <div class="cardSideHead">
+                    <div class="CardSideHeadText">
+                        <h3>HEAD TITLE</h3>
+                    </div>
+                </div>
+                <div class="cardSideBody">
+                    <div class="cardSideBodyText">Donec ipsum lorem, sodales a sagittis ut, convallis non nibh. Integer
+                        vitae cursus nunc, et vestibulum augue. Donec lacinia tristique purus. Aenean in est pretium
+                        lectus euismod facilisis.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="footer" style="clear: left">
+        <div class="credit">&copy Created by KY</div>
+    </div>
 </body>

@@ -44,16 +44,16 @@ app.use(function(req, res, next) {
 });
 
 app.get('/',(req,res)=>{
-  res.redirect('/form/5d6542c857e9f71224c2ba24');
+  res.send('<h2>Form not Found</h2>');
 })
 
 // Routes
 app.use('/form', require('./routes/user.js'));
 app.use('/admin', require('./routes/admin.js'));
 
-// app.get('*',(req,res)=>{
-//   res.redirect('/form');
-// })
+app.get('*',(req,res)=>{
+  res.send('<h1><center>404 Error Page Not Found</center></h1>');
+})
 
 const PORT = process.env.PORT || 5000;
 

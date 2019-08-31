@@ -29,7 +29,8 @@ router.post('/event/create', ensureAuthenticated, async (req, res) => {
     formSchema: [
       { inputType: 'text', label: "Name" },
       { inputType: 'email', label: "Email" },
-      { inputType: 'number', label: "Student ID" }
+      { inputType: 'number', label: "Student ID" },
+      { inputType: 'text', label: 'Class' }
     ]
   })
   await newEvent.save().then(() => {
@@ -50,6 +51,7 @@ router.get('/event/edit/:id', async (req, res) => {
   })
 })
 
+//edit event field
 router.put('/event/edit/:id', async (req, res) => {
   let event = await Event.findById(req.params.id);
   if (req.body["type"] === "formSchema") {
@@ -59,7 +61,7 @@ router.put('/event/edit/:id', async (req, res) => {
         schema.label = req.body.label
 
         console.log(event.formSchema)
-        event.save().then(res => {
+        await event.save().then(res => {
           console.log(res)
           return
         }).catch(err => console.log(err))
@@ -68,7 +70,12 @@ router.put('/event/edit/:id', async (req, res) => {
   }
 })
 
+router.delete('/event/edit/:id', async (req, res) =>{
+  let event = await Event.findById(req.params.id);
+  
+})
 
+//add new field
 router.post('/event/edit/:id', ensureAuthenticated, async (req, res) => {
   let event = await Event.findById(req.params.id);
   let form = {
@@ -83,8 +90,11 @@ router.post('/event/edit/:id', ensureAuthenticated, async (req, res) => {
 })
 
 //preview event
-router.get('/event/preview/:id', ensureAuthenticated, async (req, res) => {
-  res.render('form')
+router.get('/event/:id', ensureAuthenticated, async (req, res) => {
+  let event = await Event.findById(req.params.id);
+  res.render('form', {
+    event: event
+  });
 })
 
 //show participant
@@ -98,6 +108,25 @@ router.get('/event/:id/participant', ensureAuthenticated, async (req, res) => {
     event: event
   });
 })
+
+//participant status
+router.put('/event/:id/participant/:formid', ensureAuthenticated, async (req, res) => {
+  let form = await Form.findById(req.params.formid);
+  if(form.ownedBy != req.params.id ){
+    res.status('401').redirect('back')
+  }
+  
+  form.status = req.body['value']
+  await form.save()
+  .then(result=>{
+    console.log(result);
+  })
+  .catch(err=>{
+    console.log(err)
+    res.status(404).json({msg : "Failed to Update Status"})
+  })  
+})
+
 
 router.get('/event/:eventid/participant/:formid', ensureAuthenticated, async (req, res) => {
   let event = await Event.findById(req.params.eventid);
