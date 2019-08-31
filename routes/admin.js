@@ -42,7 +42,6 @@ router.post('/event/create', ensureAuthenticated, async (req, res) => {
   })
 })
 
-
 //edit event page
 router.get('/event/edit/:id', ensureAuthenticated, async (req, res) => {
   let event = await Event.findById(req.params.id);
@@ -65,37 +64,53 @@ router.put('/event/edit/:id', ensureAuthenticated, async (req, res) => {
           res.json(result)
           console.log(result)
           return
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err)
-          res.status(404).json({ msg: 'Failed to update Event'})
+          res.status(404).json({ msg: 'Failed to update Event' })
         })
       }
     }
-  }else if(req.body["type"]==="event"){
+  } else if (req.body["type"] === "event") {
     keys = Object.keys(req.body).filter(name => !['type'].includes(name))
     console.log(keys)
-    for(let key of keys){
+    for (let key of keys) {
       event[key] = req.body[key];
     }
     console.log(event)
     await event.save().then(result => {
       console.log(result)
       res.json(result)
-    }).catch(err=>{
+    }).catch(err => {
       console.log(err)
-      res.status(404).json({ msg: 'Failed to update Event'})
+      res.status(404).json({ msg: 'Failed to update Event' })
     })
   }
 })
 
-router.delete('/event/edit/:id', async (req, res) =>{
+//delete event field
+router.delete('/event/edit/:id', ensureAuthenticated, async (req, res) => {
   let event = await Event.findById(req.params.id);
-  
+  let list = event.formSchema.filter(function (field) {
+    return field._id != req.body._id
+  })
+  event.formSchema = list
+  await event.save().then(result => {
+    res.json(result)
+    console.log(result)
+    return
+  }).catch(err => {
+    console.log(err)
+    res.status(404).json({ msg: 'Failed to update Event' })
+  })
+
 })
 
 //add new field
 router.post('/event/edit/:id', ensureAuthenticated, async (req, res) => {
   let event = await Event.findById(req.params.id);
+  if (!req.body.new_inputType || !req.body.new_label) {
+    return
+  }
   let form = {
     inputType: req.body.new_inputType,
     label: req.body.new_label
@@ -130,19 +145,19 @@ router.get('/event/:id/participant', ensureAuthenticated, async (req, res) => {
 //participant status
 router.put('/event/:id/participant/:formid', ensureAuthenticated, async (req, res) => {
   let form = await Form.findById(req.params.formid);
-  if(form.ownedBy != req.params.id ){
+  if (form.ownedBy != req.params.id) {
     res.status('401').redirect('back')
   }
-  
+
   form.status = req.body['value']
   await form.save()
-  .then(result=>{
-    console.log(result);
-  })
-  .catch(err=>{
-    console.log(err)
-    res.status(404).json({msg : "Failed to Update Status"})
-  })  
+    .then(result => {
+      console.log(result);
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(404).json({ msg: "Failed to Update Status" })
+    })
 })
 
 

@@ -30,21 +30,22 @@ FIELD
             <option value="number">number</option>
         </select>
         <input class="labelText" type="text" name="<%= field.label %>" value="<%= field.label %>">
-        <button class="update-btn" id="<%= field._id %>" style="display: none" type="submit">update</button><button class="delete-btn">delete</button>
+        <button class="update-btn" id="<%= field._id %>" name="update" style="display: none" type="submit">update</button>
+        <button class="delete-btn" id="<%= field._id %>" name="delete">delete</button>
     </li>
 <% }) %>
 
 <form action="/admin/event/edit/<%= event._id %>" method="POST"> 
     New Field<br />
-    <select name="new_inputType">
+    <select id="new_inputType" name="new_inputType">
         <option value="none" selected disabled hidden>Select your option</option>
         <option value="email">email</option>
         <option value="text">text</option>
         <option value="number">number</option>
     </select>
     
-    <input type="text" name="new_label">
-    <button type="submit">Save</button>
+    <input type="text" id="new_label" name="new_label">
+    <button id="newField-btn" type="submit" style="display: none">Save</button>
 </form>
 
 <script>
@@ -101,6 +102,7 @@ FIELD
                 let id = $(this).attr('id');
                 let newFormField = {}
                 newFormField = {
+                    submit:"update",
                     type:"formSchema",
                     _id:id,
                     label:newLabel,
@@ -114,6 +116,33 @@ FIELD
                 $('.toast-body').text('Updated')
                 $('.toast').toast({delay:2000});
                 $('.toast').toast('show');
+            }catch(err){
+                console.log(err)
+            }
+        })
+    })
+
+    $(document).ready(function(){
+        $(".delete-btn").click(async function(e){
+            try{
+                e.preventDefault()
+                $('.toast-body').text('Deleting...')
+                $('.toast').toast({delay:1000000});
+                $('.toast').toast('show');
+                let id = $(this).attr('id');
+                let deleteField = {}
+                deleteField = {
+                    _id:id,
+                }
+                console.log(deleteField)
+            
+                await $.post('/admin/event/edit/<%=event._id%>?_method=DELETE',deleteField)
+
+                $('.toast').toast('dispose')
+                $('.toast-body').text('Delete Succeed')
+                $('.toast').toast({delay:2000});
+                $('.toast').toast('show');
+                $(this).parent().remove()
             }catch(err){
                 console.log(err)
             }
