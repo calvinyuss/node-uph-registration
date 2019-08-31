@@ -43,8 +43,8 @@ router.post('/event/create', ensureAuthenticated, async (req, res) => {
 })
 
 
-//edit event
-router.get('/event/edit/:id', async (req, res) => {
+//edit event page
+router.get('/event/edit/:id', ensureAuthenticated, async (req, res) => {
   let event = await Event.findById(req.params.id);
   res.render('edit_event', {
     event: event
@@ -52,21 +52,39 @@ router.get('/event/edit/:id', async (req, res) => {
 })
 
 //edit event field
-router.put('/event/edit/:id', async (req, res) => {
+router.put('/event/edit/:id', ensureAuthenticated, async (req, res) => {
   let event = await Event.findById(req.params.id);
+  console.log(req.body)
   if (req.body["type"] === "formSchema") {
     for (let schema of event.formSchema) {
       if (schema._id == req.body._id) {
         schema.inputType = req.body.inputType
         schema.label = req.body.label
-
         console.log(event.formSchema)
-        await event.save().then(res => {
-          console.log(res)
+        await event.save().then(result => {
+          res.json(result)
+          console.log(result)
           return
-        }).catch(err => console.log(err))
+        }).catch(err =>{
+          console.log(err)
+          res.status(404).json({ msg: 'Failed to update Event'})
+        })
       }
     }
+  }else if(req.body["type"]==="event"){
+    keys = Object.keys(req.body).filter(name => !['type'].includes(name))
+    console.log(keys)
+    for(let key of keys){
+      event[key] = req.body[key];
+    }
+    console.log(event)
+    await event.save().then(result => {
+      console.log(result)
+      res.json(result)
+    }).catch(err=>{
+      console.log(err)
+      res.status(404).json({ msg: 'Failed to update Event'})
+    })
   }
 })
 
