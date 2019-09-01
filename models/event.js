@@ -9,6 +9,8 @@ const EventSchema = mongoose.Schema({
     description: String,
     price : Number,
     seat: Number,
+    openRegis: Date,
+    closeRegis: Date,
     formSchema:[{
         inputType:{
             type:String,

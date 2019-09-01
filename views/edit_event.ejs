@@ -4,13 +4,21 @@
     </div>
 </div>
 <br/>
-    name
+<div>
+name
     <input class="field" type="text" name="name" value="<%= event.name %>">
     <br>
     description
     <textarea class="field" name="description"><%= event.description %></textarea>
-    <!-- <input class="field" type="text" name="description" value="<%= event.description %>">  -->
     <br>
+    Open Registration
+    <input class="field" id="openRegis" name="openRegis" type="date"><br/>
+    Close Registration
+    <input class="field" id="closeRegis" 
+        name="closeRegis" 
+        type="date"
+        data-toggle="popover" 
+        data-content="Close registration can't before open registration"><br/>
     price
     <input class="field" type="text" name="price" value="<%= event.price %>">
     <br/>
@@ -19,7 +27,7 @@
     <br>
     <button class="save" id="seat" style="display: none">update</button>
     <br/>
-
+</div>
 FIELD
 <br/>
 <% event.formSchema.forEach(function(field){ %>
@@ -84,6 +92,23 @@ FIELD
     })
 </script>
 <script>
+    $(document).ready(function(){
+        $('[id="openRegis"],[id="closeRegis"]').change(function(){
+            let openRegis = $("#openRegis").val()
+            let closeRegis = $("#closeRegis").val()
+            console.log(openRegis + " " + closeRegis)
+            let isAfter = moment(openRegis).isAfter(closeRegis);
+            console.log(isAfter)
+            if(isAfter){
+                $(".save").attr("disabled",true);
+                $('[data-toggle="popover"]').popover("show")
+            }else{
+                $(".save").attr("disabled",false);
+                $('[data-toggle="popover"]').popover("hide")
+            }
+        })
+    })
+
     $(document).ready(function(){
         $(".labelText, .inputType").change(function(){
             let id = $(this).parent().attr('id')

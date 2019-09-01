@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const moment = require('moment')
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 
 const Event = require('../models/event');
@@ -24,6 +25,8 @@ router.post('/event/create', ensureAuthenticated, async (req, res) => {
     createBy: user.id,
     name: req.body.createEventName,
     description: req.body.createDescription,
+    openRegis:req.body.openRegis,
+    closeRegis:req.body.closeRegis,
     price: req.body.createPrice,
     seat: req.body.createSeat,
     formSchema: [
@@ -33,6 +36,7 @@ router.post('/event/create', ensureAuthenticated, async (req, res) => {
       { inputType: 'text', label: 'Class' }
     ]
   })
+  console.log(newEvent)
   await newEvent.save().then(() => {
     req.flash('success_msg', 'Event Created');
     res.redirect('/admin/dashboard');

@@ -1,12 +1,37 @@
+
 <form action="/admin/event/create" method="POST">
     Event Name
-    <input type="text" name="createEventName"><br/>
+    <input type="text" name="createEventName" required><br/>
     description
-    <input type="text" name="createDescription"><br/>
+    <!-- <input type="text" name="createDescription"><br/> -->
+    <textarea name="createDescription"></textarea><br/>
+    Open Registration
+    <input id="openRegis" name="openRegis" type="date"><br/>
+    Close Registration
+    <input id="closeRegis" name="closeRegis" type="date" data-toggle="popover" data-content="Close registration can't before open registration"><br/>
     Price
     <input type="number" name="createPrice"><br/>
     Seat
-    <input type="number" name="createSeat"><br/>
-    <button type="submit">submit</button>
+    <input type="number" name="createSeat" required><br/>
+    <button class="submit" type="submit">submit</button>
 </form>
+
+<script>
+    $(document).ready(function(){
+        $('[id="openRegis"],[id="closeRegis"]').change(function(){
+            let openRegis = $("#openRegis").val()
+            let closeRegis = $("#closeRegis").val()
+            console.log(openRegis + " " + closeRegis)
+            let isAfter = moment(openRegis).isAfter(closeRegis);
+            console.log(isAfter)
+            if(isAfter){
+                $(".submit").attr("disabled",true);
+                $('[data-toggle="popover"]').popover("show")
+            }else{
+                $(".submit").attr("disabled",false);
+                $('[data-toggle="popover"]').popover("hide")
+            }
+        })
+    })
+</script>
 

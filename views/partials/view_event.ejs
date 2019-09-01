@@ -2,17 +2,22 @@
     <div class="toast-body">
     </div>
 </div>
-<div>
+<% if (events.length == 0) { %>
+<div>No Event Running</div>
+<%}else{%>
     <% events.forEach(function(event){ %>
-    <li>
-        <%= event.name %>
-        <a href="/admin/event/edit/<%=event._id%>">Edit</a>
-        <a href="/admin/event/<%=event._id%>">Preview</a>
-        <a href="/admin/event/<%=event._id%>/participant">Participant</a>
-        <a id="<%=event._id%>" href="" class="delete-event-btn">Delete event</a>
-    </li>
-    <%}) %>
-</div>
+        <li>
+            <%= event.name %>
+            <a href="/admin/event/edit/<%=event._id%>">Edit</a>
+            <a href="/admin/event/<%=event._id%>">Preview</a>
+            <a href="/admin/event/<%=event._id%>/participant">Participant</a>
+            <a id="<%=event._id%>" href="" class="delete-event-btn">Delete event</a>
+        </li>
+        <%}) %>
+    </div>
+<%}%>
+<div>
+
 
 <script>
     $(document).ready(function(){
