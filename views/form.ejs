@@ -172,8 +172,10 @@ input {
                                 <input type="<%= field.inputType %>" name="<%= field.label %>" placeholder="<%= field.label %>">
                             <% } %>
                         </div>
-                    <% } %>
-                    <button class="register" type="submit" value="REGISTER">REGISTER</button>
+					<% } %>
+					<div style="text-align: center">
+						<button class="register col-sm-7" type="submit" value="REGISTER">REGISTER</button>
+					</div>
                 </form>
             </div>
 
@@ -195,5 +197,20 @@ input {
 
     <div class="footer" style="clear: left">
         <div class="credit">&copy Created by KY</div>
-    </div>
+	</div>
+	
+
 </body>
+
+<script>
+	
+	$(document).ready(function(){
+	})
+
+	$(document).ready(function(){
+		$('input[type="email"]').attr("pattern",'.+@student.uph.edu')
+		$('input[type="email"]').attr("title",'Please Use Your Student email')
+		$('input').attr("required",true)
+	})
+</script>
+

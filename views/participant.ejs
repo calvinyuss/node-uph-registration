@@ -20,6 +20,10 @@
     </style>
 </head>
 <body>
+        <div class="toast hide position-absolute mt-2" style="left: 50%" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+            </div>
+        </div>
     <h1>Participant</h1>
     
     <table>
@@ -38,13 +42,17 @@
             <% }) %> 
                 <td id='status'><%= form.status %></td>
                  <td id="<%=form._id%>" class="text-center" style="width: 7rem">
+                    <% if(form.status=='Pending'){ %>
+                        <button id="submit-status" value="Waiting" class="btn btn-sm btn-success" type="submit">&#10003</button>
+                        <button id="submit-status" value="Rejected" class="btn btn-sm btn-danger" type="submit">&#10006</button>
+                    <%}%>
                     <% if(form.status=='Waiting'){ %>
-                        <button id="submit-status" value="Accepted" class="btn btn-xs btn-success" type="submit">&#10003</button>
-                        <button id="submit-status" value="Rejected" class="btn btn-xs btn-danger" type="submit">&#10006</button>
+                        <button id="submit-status" value="Accepted" class="btn btn-sm btn-success" type="submit">&#10003</button>
+                        <button id="submit-status" value="Rejected" class="btn btn-sm btn-danger" type="submit">&#10006</button>
                     <%}else if(form.status=="Rejected"){%>
-                        <button id="submit-status" value="Accepted" class="btn btn-xs btn-success" type="submit">&#10003</button>
+                        <button id="submit-status" value="Waiting" class="btn btn-sm btn-success" type="submit">&#10003</button>
                     <%}else if(form.status=="Accepted"){%>
-                        <button id="submit-status" value="Rejected" class="btn btn-xs btn-danger" type="submit">&#10006</button>
+                        <button id="submit-status" value="Rejected" class="btn btn-sm btn-danger" type="submit">&#10006</button>
                     <%}%>
                  </td>
                 
@@ -77,26 +85,7 @@
     </div>
 
 <script>
-    // $(document).ready(function(){
-    //     $(".field").click(function(){
-    //         let fields = []
-    //         $(this).children('td').each(function(){
-    //             let id = $(this).attr('id');
-    //             let text = $(this).text();
-    //             fields.push({
-    //                 id : id,
-    //                 text : text
-    //             })
-    //         })
-    //         for(let field of fields){
-    //             console.log(field.id.trim())
-    //             console.log(field.id)
-    //             $('.modal_field').find(`#${field.id}`).html(`${field.text}`)
-    //         }
-    //         $("#myModal").modal()
-    //     });
-    // });
-
+    //modal
     $(document).ready(function(){
         $(".field").click(function(){
             let fields = []
@@ -124,12 +113,6 @@
     })
 
     $(document).ready(function(){
-        $("#status").submit(function(){
-            console.log($(this).parent.attr('id'))
-        })
-    })
-
-    $(document).ready(function(){
         $(".field").hover(function(){
             $(this).css("cursor","pointer")
             $(this).css('opacity','0.5')
@@ -142,7 +125,14 @@
     })
 
     $(document).ready(function(){
-        $('#submit-status').click(async function(e){
+        $('#submit-status').click(function(){
+            console.log("clicked")
+        })
+    })
+
+    //change participant status
+    $(document).ready(function(){
+        $('button#submit-status').click(async function(e){
             e.preventDefault()
             let id = $(this).parent().attr("id")
             let formStatus= $(this).val()
@@ -152,7 +142,18 @@
                 _id: id,
                 value : formStatus
             }
-            await $.post(`/admin/event/<%=event._id%>/participant/${id}?_method=PUT`,status)
+            $('.toast-body').text('Loading . . .')
+            $('.toast').toast({delay:1000000});
+            $('.toast').toast('show');
+            console.log(status)
+
+            await $.post(`/admin/event/<%=event._id%>/participant?_method=PUT`,status)
+
+            $('.toast').toast('dispose')
+            $('.toast-body').text('Status Changed')
+            $('.toast').toast({delay:2000});
+            $('.toast').toast('show');
+            location.reload();
         })
     })
 

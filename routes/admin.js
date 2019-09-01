@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const mail = require('../config/mail');
 const moment = require('moment')
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 
@@ -160,16 +161,28 @@ router.get('/event/:id/participant', ensureAuthenticated, async (req, res) => {
 })
 
 //participant status
-router.put('/event/:id/participant/:formid', ensureAuthenticated, async (req, res) => {
-  let form = await Form.findById(req.params.formid);
+router.put('/event/:id/participant', ensureAuthenticated, async (req, res) => {
+  let form = await Form.findById(req.body['_id']);
+  let forms = await Form.find({ownedBy: req.params.id})
+  let event = await Event.findById(req.params.id);
   if (form.ownedBy != req.params.id) {
+    console.log("Unauthorize user")
     res.status('401').redirect('back')
   }
-
   form.status = req.body['value']
   await form.save()
     .then(result => {
-      console.log(result);
+      console.log(result.data.Name)
+      console.log(result.data.Email)
+      console.log(event.price)
+      if(result.status==='waiting'){
+        mail.paymentMail({
+          name:result.data.name,
+          price: result.data.price,
+          email: result.data.Email
+        })
+      }
+      res.json(result)
     })
     .catch(err => {
       console.log(err)

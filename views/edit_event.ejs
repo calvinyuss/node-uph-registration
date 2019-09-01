@@ -64,6 +64,12 @@ FIELD
       })
     });
 
+    $(document).ready(function() {
+      $("#new_label, #new_inputType").change(function(){
+          $('#newField-btn').show();
+      })
+    });
+
     $(document).ready(function(){
         $(".save").click(async function(e){
             e.preventDefault()

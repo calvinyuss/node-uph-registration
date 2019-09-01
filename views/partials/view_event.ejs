@@ -11,7 +11,8 @@
             <a href="/admin/event/edit/<%=event._id%>">Edit</a>
             <a href="/admin/event/<%=event._id%>">Preview</a>
             <a href="/admin/event/<%=event._id%>/participant">Participant</a>
-            <a id="<%=event._id%>" href="" class="delete-event-btn">Delete event</a>
+            <a id="<%=event._id%>" href="" class="delete-event-btn" style="display:none">Delete event</a>
+            <a id="host_name" href="/form/<%=event._id%>"></a>
         </li>
         <%}) %>
     </div>
@@ -20,6 +21,11 @@
 
 
 <script>
+    $(document).ready(function(){
+        let href = $("#host_name").attr("href");
+        $("#host_name").text(window.location.hostname+`${href}`)
+    })
+
     $(document).ready(function(){
         $(".delete-event-btn").click(async function(e){
             e.preventDefault()

@@ -19,7 +19,8 @@ router.post('/:id/register',async(req,res)=>{
     let fieldName = event.formSchema.map(field => field.label)
     for(let field of fieldName){
         if(!req.body[field]){
-            res.redirect('back')
+            req.flash("error_msg","Something went wrong, try again")
+            return res.redirect('back')
         }
         newForm[field] = req.body[field]
     }
@@ -36,6 +37,15 @@ router.post('/:id/register',async(req,res)=>{
         res.redirect("back")
     }
 
+})
+
+//upload file
+router.get('/upload/:id',async (req,res)=>{
+    let form = await Form.findById(req.params.id);
+    console.log(form)
+    res.render('upload',{
+        form:form
+    })
 })
 
 module.exports = router;

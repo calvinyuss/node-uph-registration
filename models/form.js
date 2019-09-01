@@ -7,8 +7,8 @@ const formSchema = new mongoose.Schema({
     },
     status:{
         type:String,
-        default :'Waiting',
-        enum : ['Waiting','Accepted','Rejected'] 
+        default :'Pending',
+        enum : ['Pending','Waiting','Accepted','Rejected'] 
     },
     data: mongoose.Schema.Types.Mixed,
     date: {
