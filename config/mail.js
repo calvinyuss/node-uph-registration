@@ -17,14 +17,61 @@ const transporter = nodemailer.createTransport({
 	}
 });
 
-function paymentMail(data){
-    const email = data.email;
+const Form_SP = require('./FormStatus_Payment')
+const Form_SAc = require('./FormStatus_Accepted')
+const Form_SR = require('./FormStatus_Rejected')
+const Form_SAp = require('./FormStatus_Approval')
+
+function Send_FSP(data){
+    const email = data.data.Email;
 	//isi dari email
 	const messageOption = {
 		from : myEmail,
 		to : email,
 		subject : "noreply.hmfik@gmail.com",
-		html : emailBody(data)
+		html : Form_SP.FSP(data)
+	}
+
+	//send email
+	transporter.sendMail(messageOption)
+}
+
+function Send_FSAc(data){
+    const email = data.Email;
+	//isi dari email
+	const messageOption = {
+		from : myEmail,
+		to : email,
+		subject : "noreply.hmfik@gmail.com",
+		html : Form_SAc.FSAc(data)
+	}
+
+	//send email
+	transporter.sendMail(messageOption)
+}
+
+function Send_FSAp(data){
+    const email = data.Email;
+	//isi dari email
+	const messageOption = {
+		from : myEmail,
+		to : email,
+		subject : "noreply.hmfik@gmail.com",
+		html : Form_SAp.FSAp(data)
+	}
+
+	//send email
+	transporter.sendMail(messageOption)
+}
+
+function Send_FSR(data){
+    const email = data.Email;
+	//isi dari email
+	const messageOption = {
+		from : myEmail,
+		to : email,
+		subject : "noreply.hmfik@gmail.com",
+		html : Form_SR.FSR(data)
 	}
 
 	//send email
@@ -32,37 +79,10 @@ function paymentMail(data){
 }
 
 
-
-//WEBMAIL HTML
-function emailBody(data){
-    var name = data.nama;
-	var price = data.price;
-	var uploadLink = "https://testkaye.herokuapp.com/userupload/?user="+userID;
-	var uploadLinkBackup = "https://testkaye.herokuapp.com/userupload/upload/?user="+userID;
-	
-	return `
-			<div>
-	<center>
-	<h1>HELLO ${name} </h1>
-	<h2>Waiting for payment</h2>
-	<h3>Please finish your payment under 24 hour </h3>
-	<br>
-	<h3>Your fee Rp ${price}</h3>
-	<h3>Upload bukti pembayaran</h3>
-	<form action="${uploadLink}" method="POST">
-		<input type="file" name="buktiBayar">
-		<input type="submit">
-	</form>
-	<h2>Jika tidak bisa klik link berikut</h2>
-	<h2><a href="${uploadLinkBackup}">LINK</a></h2>
-	</center>
-</div>
-	`
-}
-
-
-
 module.exports = {
-    paymentMail
+    Send_FSP,
+    Send_FSR,
+    Send_FSAp,
+    Send_FSAc
 }
 

@@ -163,7 +163,7 @@ router.get('/event/:id/participant', ensureAuthenticated, async (req, res) => {
 //participant status
 router.put('/event/:id/participant', ensureAuthenticated, async (req, res) => {
   let form = await Form.findById(req.body['_id']);
-  let forms = await Form.find({ownedBy: req.params.id})
+  // let forms = await Form.find({ownedBy: req.params.id})
   let event = await Event.findById(req.params.id);
   if (form.ownedBy != req.params.id) {
     console.log("Unauthorize user")
@@ -175,12 +175,17 @@ router.put('/event/:id/participant', ensureAuthenticated, async (req, res) => {
       console.log(result.data.Name)
       console.log(result.data.Email)
       console.log(event.price)
-      if(result.status==='waiting'){
-        mail.paymentMail({
-          name:result.data.name,
-          price: result.data.price,
-          email: result.data.Email
-        })
+      if(result.status==='Waiting'){
+        console.log("waiting")
+        mail.Send_FSP(result)
+      }
+      if(result.status==='Accepted'){
+        console.log("acc")
+        mail.Send_FSAc(result.data)
+      }
+      if(result.status==='Rejected'){
+        console.log("reject")
+        mail.Send_FSR(result.data)
       }
       res.json(result)
     })

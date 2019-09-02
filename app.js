@@ -7,10 +7,12 @@ const methodOverride = require('method-override');
 const db = require('./models/db');
 const app = express();
 
+require('dotenv').config()
 // Passport Config
 require('./config/passport')(passport);
 
 // EJS
+app.use(express.static(__dirname + '/public'));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
@@ -50,11 +52,9 @@ app.get('/',(req,res)=>{
 // Routes
 app.use('/form', require('./routes/user.js'));
 app.use('/admin', require('./routes/admin.js'));
-
 app.get('*',(req,res)=>{
   res.send('<h1><center>404 Error Page Not Found</center></h1>');
 })
 
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
