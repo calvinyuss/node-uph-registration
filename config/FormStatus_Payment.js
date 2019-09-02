@@ -1,7 +1,7 @@
 function FSP(userData){
   const NAME = userData.data.Name
   event = userData.ownedBy
-  var LINK = `#/userupload/${event}/?user=${userData._id}`
+  var LINK = `https://smarttech40.herokuapp.com/userupload/${event}/?user=${userData._id}`
   console.log(LINK)
 
   return `
