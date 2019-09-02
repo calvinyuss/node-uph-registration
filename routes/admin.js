@@ -8,6 +8,8 @@ const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const Event = require('../models/event');
 const Form = require('../models/form');
 
+
+
 router.get('/', (req, res) => res.redirect("/admin/login"));
 
 // home page
@@ -148,8 +150,11 @@ router.get('/event/:id', ensureAuthenticated, async (req, res) => {
   });
 })
 
+function put(t){
+  console.log(t)
+}
 //show participant
-router.get('/event/:id/participant', ensureAuthenticated, async (req, res) => {
+router.get('/event/:id/participant', ensureAuthenticated,  async (req, res) => {
   let event = await Event.findById(req.params.id);
   let forms = await Form.find({
     ownedBy: event._id
@@ -158,12 +163,16 @@ router.get('/event/:id/participant', ensureAuthenticated, async (req, res) => {
     forms: forms,
     event: event
   });
+  put("+++++++++++++++++++++++++++++EVENT++++++++++++++++++++++++++++++++")
+  put(event)
+  put("=============================FORM=================================")
+  put(forms)
 })
 
 //participant status
 router.put('/event/:id/participant', ensureAuthenticated, async (req, res) => {
   let form = await Form.findById(req.body['_id']);
-  // let forms = await Form.find({ownedBy: req.params.id})
+  let forms = await Form.find({ownedBy: req.params.id})
   let event = await Event.findById(req.params.id);
   if (form.ownedBy != req.params.id) {
     console.log("Unauthorize user")
@@ -176,15 +185,15 @@ router.put('/event/:id/participant', ensureAuthenticated, async (req, res) => {
       console.log(result.data.Email)
       console.log(event.price)
       if(result.status==='Waiting'){
-        console.log("waiting")
+        put("waiting")
         mail.Send_FSP(result)
       }
       if(result.status==='Accepted'){
-        console.log("acc")
+        put("acc")
         mail.Send_FSAc(result.data)
       }
       if(result.status==='Rejected'){
-        console.log("reject")
+        put("reject")
         mail.Send_FSR(result.data)
       }
       res.json(result)

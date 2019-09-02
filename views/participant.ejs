@@ -1,6 +1,7 @@
 <head>
     <style>
     table {
+    font-size: 13px;
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
@@ -10,7 +11,7 @@
     th {
     border: 1px solid #dddddd;
     text-align: left;
-    padding: 8px;
+    padding: 4px;
     }
 
     tr:nth-child(even) {
@@ -30,15 +31,32 @@
         
         <tr>
         <% event.formSchema.forEach(function(field){ %>
-            <td><%= field.label  %></td>
+            <td class="text-center"><%= field.label  %></td>
         <% }) %>
-            <td>Status</td>
+            <td class="text-center">Payment</td>
+            <td class="text-center">Time</td>
+            <td class="text-center">Status</td>
+            <!-- <td>Name</td>
+            <td>Bukti pembayaran</td>
+            <td>Date</td>
+            <td>Email</td>
+            <td>Student ID</td>
+            <td>Class</td>
+            <td>LineID</td> -->
         </tr>
 
         <% forms.forEach(function(form){ %>
         <tr id="<%=form._id%>">
             <% Object.keys(form.data).forEach(function(key){ %>
-                <td class="field" id="<%=key.replace(/\s/g, '')%>"><%=form.data[key]%></td>
+                <%if(key==="PembayaranURL"){ %>
+                    <%if(form.data[key]==null){ %>
+                        <td id="<%=key.replace(/\s/g, '')%>">Payment</td>
+                    <% }else{ %>
+                        <td id="<%=key.replace(/\s/g, '')%>"><a href="<%=form.data[key]%>">Payment</a></td>
+                    <% } %>
+                <% }else{ %>
+                    <td class="field" id="<%=key.replace(/\s/g, '')%>"><%=form.data[key]%></td>
+                <% } %>
             <% }) %> 
                 <td id='status'><%= form.status %></td>
                  <td id="<%=form._id%>" class="text-center" style="width: 7rem">

@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const moment = require('moment-timezone');
 
 const Event = require('../models/event');
 const Form = require('../models/form');
+const mail = require('../config/mail');
 
 router.get('/:id',async(req,res)=>{
     let event = await Event.findById(req.params.id);
@@ -24,12 +26,15 @@ router.post('/:id/register',async(req,res)=>{
         }
         newForm[field] = req.body[field]
     }
+    newForm['PembayaranURL'] = null
+    newForm['Date'] = moment().tz('Asia/Jakarta').format('lll');
     let form
     try {
         form = await Form.create({
             ownedBy: event._id,
             data: newForm,
         })
+        mail.Send_FSAp(form.data)
         req.flash("success_msg","Register Success wait for email")
         res.redirect('back');
     } catch (error) {

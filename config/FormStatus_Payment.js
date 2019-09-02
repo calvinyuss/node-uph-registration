@@ -1,7 +1,7 @@
 function FSP(userData){
   const NAME = userData.data.Name
   event = userData.ownedBy
-  var LINK = `http://localhost:5000/userupload/${event}/?user=${userData._id}`
+  var LINK = `#/userupload/${event}/?user=${userData._id}`
   console.log(LINK)
 
   return `
@@ -376,7 +376,12 @@ function FSP(userData){
                             ></strong
                           >
                           </p>
-                          <p>Please settle the payment within <strong>48 hours</strong> since you recevied this email. Please transfer the <strong>registration fee (exactly as written above)</strong> to <strong>one of these accounts</strong>:</p>
+                          
+                          <p>Please settle the payment within <strong>24 hours</strong> since you recevied this email. Please transfer the <strong>registration fee (exactly as written above)</strong> to <strong>one of these accounts</strong>:</p>
+                          <ul>
+                          <li>Rek BCA 8000077985 a.n. Dustin Jourdan</li>
+                          <li>Rek OVO 082273281930 a.n. Dustin Jourdan</li>
+                          </ul>
                           <p>Then, please upload your payment receipt through <a href="${LINK}" target="_blank">this link</a>.</p>
                           <a class="btn btn-primary" href="${LINK}" target="_blank" role="button">Upload My Receipt</a>
                           <p></p>
