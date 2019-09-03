@@ -26,7 +26,7 @@ router.post('/:id/register',async(req,res)=>{
         }
         newForm[field] = req.body[field]
     }
-    newForm['PembayaranURL'] = null
+    newForm['PembayaranURL'] = null;
     newForm['Date'] = moment().tz('Asia/Jakarta').format('lll');
     let form
     try {
@@ -35,7 +35,7 @@ router.post('/:id/register',async(req,res)=>{
             data: newForm,
         })
         mail.Send_FSAp(form.data)
-        req.flash("success_msg","Register Success wait for email")
+        req.flash("success_msg","Register Success")
         res.redirect('back');
     } catch (error) {
         console.log(error)

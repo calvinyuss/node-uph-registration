@@ -48,17 +48,19 @@ router.post('/upload/:eventid', parser.single("bukti"), async (req, res) => {
 
   var q = url.parse(req.url,true);
   let event = await Event.findById(req.params.eventid);
-  let userData = await Form.find({
-    ownedBy: event._id,
-    _id: q.query.user
-  })
+  let form = await Form.findById(q.query.user);
   console.log(q.query.user)
-  put(userData)
+  
   const image = {};
   image.url = req.file.url;
   image.id = req.file.public_id;
-  let form = await Form.findById(q.query.user)
+
+  console.log(image)
+  console.log(image.url)
+
   form.data.PembayaranURL = image.url
+  form.markModified('data')
+
   form.save().then((result)=>{
     console.log(result)
     res.render('sucessupload')

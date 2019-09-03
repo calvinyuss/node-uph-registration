@@ -38,13 +38,13 @@
                         	<label><%= field.label %></label>
                             <% if (field.inputType === 'number') { %>
                                 <input type="text" name="<%= field.label %>" pattern="\d+" placeholder="<%= field.label %>" class="input-text" required>
-                            <% } else { %>
+							<% } else { %>
                                 <input type="<%= field.inputType %>" name="<%= field.label %>" placeholder="<%= field.label %>" class="input-text" required>
                             <% } %>
                         </div>
 				<% } %>
 				<div class="form-row-last">
-					<input type="submit" name="register" class="register" value="Register">
+					<input onclick="topFunction()" type="submit" name="register" class="register" value="Register">
 				</div>
 			</form>
 		</div>
@@ -54,7 +54,11 @@
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 	<script>
-	
+		function topFunction() {
+			document.body.scrollTop = 0;
+			document.documentElement.scrollTop = 0;
+		}
+
 		$(document).ready(function(){
 			let currentDate = moment().format();
 			let openRegis = moment("<%= event.openRegis%>").format();
