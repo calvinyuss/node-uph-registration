@@ -73,6 +73,7 @@
                         <button id="submit-status" value="Rejected" class="btn btn-sm btn-danger" type="submit">&#10006</button>
                     <%}%>
                  </td>
+                 <td id="<%=form._id%>" class="text-center"><a href="#" class="delete-participant">Delete</a></td>
                 
         </tr>
         <% }) %>
@@ -169,6 +170,23 @@
 
             $('.toast').toast('dispose')
             $('.toast-body').text('Status Changed')
+            $('.toast').toast({delay:2000});
+            $('.toast').toast('show');
+            location.reload();
+        })
+    })
+
+    $(document).ready(function(){
+        $('a.delete-participant').click(async function(e){
+            e.preventDefault()
+            let id = $(this).parent().attr("id")
+            console.log(id)
+            $('.toast-body').text('Deleting . . .')
+            $('.toast').toast({delay:1000000});
+            $('.toast').toast('show');
+            await $.post(`/admin/event/<%=event._id%>/participant?_method=DELETE`,{_id:id});
+            $('.toast').toast('dispose')
+            $('.toast-body').text('Deleted')
             $('.toast').toast({delay:2000});
             $('.toast').toast('show');
             location.reload();

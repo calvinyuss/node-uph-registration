@@ -169,6 +169,19 @@ router.get('/event/:id/participant', ensureAuthenticated,  async (req, res) => {
   put(forms)
 })
 
+//delete 
+router.delete('/event/:id/participant', ensureAuthenticated, async (req, res) => {
+  console.log(req.body._id)
+  try{
+    await Form.findByIdAndDelete(req.body._id,(err,result)=>{
+      if(err) throw err
+      res.json(result)
+    });
+  }catch(err){
+    console.log(err)
+  }
+})
+
 //participant status
 router.put('/event/:id/participant', ensureAuthenticated, async (req, res) => {
   let form = await Form.findById(req.body['_id']);

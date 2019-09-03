@@ -35,7 +35,11 @@
 
 				<% for (let field of event.formSchema) { %>
                         <div class="form-row">
-                        	<label><%= field.label %></label>
+							<% if(field.label === 'Email') { %>
+								<label>Student Email</label>
+							<% }else{ %>
+							<label><%= field.label %></label>
+							<%}%>
                             <% if (field.inputType === 'number') { %>
                                 <input type="text" name="<%= field.label %>" pattern="\d+" placeholder="<%= field.label %>" class="input-text" required>
 							<% } else { %>
