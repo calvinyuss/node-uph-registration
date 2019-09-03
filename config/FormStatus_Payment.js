@@ -377,7 +377,7 @@ function FSP(userData){
                           >
                           </p>
                           
-                          <p>Please settle the payment within <strong>24 hours</strong> since you recevied this email. Please transfer the <strong>registration fee (exactly as written above)</strong> to <strong>one of these accounts</strong>:</p>
+                          <p>Please settle the payment within <strong>24 hours</strong> since you received this email. Please transfer the <strong>registration fee (exactly as written above)</strong> to <strong>one of these accounts</strong>:</p>
                           <ul>
                           <li>Rek BCA 8000077985 a.n. Dustin Jourdan</li>
                           <li>Rek OVO 082273281930 a.n. Dustin Jourdan</li>

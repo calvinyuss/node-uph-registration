@@ -15,9 +15,19 @@ router.get('/:id',async(req,res)=>{
     });
 })
 
+//saving registration information
 router.post('/:id/register',async(req,res)=>{
     let event = await Event.findById(req.params.id);
     let newForm = {};
+    //check if email exist
+    await Form.find({"data.Email":req.body.Email},(err,result)=>{
+        console.log(result)
+        if(result.length>0){
+            req.flash("error_msg","Email already exist")
+            res.redirect("back")
+        }
+    })
+    //get form schema for req body field
     let fieldName = event.formSchema.map(field => field.label)
     for(let field of fieldName){
         if(!req.body[field]){
@@ -30,18 +40,17 @@ router.post('/:id/register',async(req,res)=>{
     newForm['Date'] = moment().tz('Asia/Jakarta').format('lll');
     let form
     try {
-        form = await Form.create({
-            ownedBy: event._id,
-            data: newForm,
-        })
-        mail.Send_FSAp(form.data)
-        req.flash("success_msg","Register Success")
+        // form = await Form.create({
+        //     ownedBy: event._id,
+        //     data: newForm,
+        // })
+        // mail.Send_FSAp(form.data)
+        req.flash("success_msg","Registration successful, please check your email")
         res.redirect('back');
     } catch (error) {
         console.log(error)
         res.redirect("back")
     }
-
 })
 
 //upload file
