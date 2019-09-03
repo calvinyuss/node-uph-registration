@@ -40,11 +40,11 @@ router.post('/:id/register',async(req,res)=>{
     newForm['Date'] = moment().tz('Asia/Jakarta').format('lll');
     let form
     try {
-        // form = await Form.create({
-        //     ownedBy: event._id,
-        //     data: newForm,
-        // })
-        // mail.Send_FSAp(form.data)
+        form = await Form.create({
+            ownedBy: event._id,
+            data: newForm,
+        })
+        mail.Send_FSAp(form.data)
         req.flash("success_msg","Registration successful, please check your email")
         res.redirect('back');
     } catch (error) {
