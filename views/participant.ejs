@@ -26,9 +26,33 @@
             </div>
         </div>
     <h1>Participant</h1>
-    
+    <div>
+        <%let waiting = 0;%>
+        <%let pending = 0; %>
+        <%let accepted = 0;%>
+        <%let rejected = 0;%>
+        <%let none = 0;%>
+        <% forms.forEach(function(form){ %>
+            <% if(form.status === "Waiting"){ %>
+                <% waiting+=1 %>
+            <%} else if(form.status === "Pending"){ %>
+                <% pending+=1 %>
+            <%} else if(form.status === "Accepted"){ %>
+                <% accepted+=1 %>
+            <%} else if(form.status === "Rejected"){ %>
+                <% rejected+=1 %>
+            <%}else{%>
+                <% none+=1 %>
+            <% } %>
+        <% }) %>
+        <span class="mr-4">Manusia LAKNAT : <%=forms.length%></span>
+        <span class="mr-4">Waiting : <%= waiting %></span>
+        <span class="mr-4">Pending : <%= pending %></span>
+        <span class="mr-4">Accepted : <%= accepted %></span>
+        <span class="mr-4">Rejected : <%= rejected %></span>
+        Anonnymous : <%= none %>
+    </div>
     <table>
-        
         <tr>
         <% event.formSchema.forEach(function(field){ %>
             <td class="text-center"><%= field.label  %></td>
@@ -44,7 +68,7 @@
             <td>Class</td>
             <td>LineID</td> -->
         </tr>
-
+        <% forms.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) %>
         <% forms.forEach(function(form){ %>
         <tr id="<%=form._id%>">
             <% Object.keys(form.data).forEach(function(key){ %>
